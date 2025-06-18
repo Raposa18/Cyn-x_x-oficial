@@ -1,0 +1,33 @@
+name: Build Cyn.apk
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar o repositório
+        uses: actions/checkout@v3
+
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Permitir execução do Gradle
+        run: chmod +x ./gradlew
+
+      - name: Construir APK
+        run: ./gradlew assembleDebug
+
+      - name: Salvar APK como artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: Cyn-x_x-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
